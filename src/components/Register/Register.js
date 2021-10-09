@@ -1,14 +1,26 @@
 import Button from '@restart/ui/esm/Button';
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import './Register.css';
 const Register = () => {
+    const [email,setEmail] =useState('');
+    const [password,setPassword] = useState('');
+    const handleEmail = (e) =>{
+        setEmail(e.target.value);
+    }
+    const handlePassword = (e) =>{
+        setPassword(e.target.value);
+    }
+    const handleRegister = () => {
+        console.log(email,password);
+    }
+
     return (
         <div>
         <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" required/>
+                <Form.Control onBlur={handleEmail} type="email" placeholder="Enter email" required/>
                 <Form.Text className="text-muted">
                 We'll never share your email with anyone else.
                 </Form.Text>
@@ -16,14 +28,14 @@ const Register = () => {
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label> 
-                <Form.Control type="password" placeholder="Password" required />
+                <Form.Control onBlur={handlePassword} type="password" placeholder="Password" required />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
             
-            <Button variant="primary" type="submit">
+            <Button onClick={handleRegister} variant="primary" type="submit">
                 Submit
             </Button>
             </Form>
