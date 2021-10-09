@@ -12,6 +12,7 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 //auth from firebase
 const auth = getAuth();
+
 function App() {
   //user state
   const [user,setUser] = useState({});
@@ -57,11 +58,12 @@ const handleSignOut = () =>{
     setUser({});
   })
 }
+
   return (
     <div className="App">
      <Container>
      <Register></Register>
-     <br/>
+     <br />
      {
        !user.name ? 
        <div>
