@@ -1,6 +1,9 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useState } from "react";
+import { Container } from 'react-bootstrap';
 import './App.css';
+import Register from './components/Register/Register';
 import initAuthentication from './Firebase/firebase.init';
 initAuthentication();
 //google provider
@@ -56,22 +59,26 @@ const handleSignOut = () =>{
 }
   return (
     <div className="App">
-      {
-        !user.name ? 
-        <div>
-        <button onClick={handleGoogleSignIn}>Google Sign In</button>
-        <button onClick={handleGithubSignIn}>Github Sign In</button>
-        </div>:
-        <button onClick={handleSignOut}>Sign out</button>
-      }
-      <br />
-      {
-        user.email && <div>
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        <img src={user.photo} alt="" />
-        </div>
-      }
+     <Container>
+     <Register></Register>
+     <br/>
+     {
+       !user.name ? 
+       <div>
+       <button onClick={handleGoogleSignIn}>Google Sign In</button>
+       <button onClick={handleGithubSignIn}>Github Sign In</button>
+       </div>:
+       <button onClick={handleSignOut}>Sign out</button>
+     }
+     <br />
+     {
+       user.email && <div>
+       <h2>{user.name}</h2>
+       <p>{user.email}</p>
+       <img src={user.photo} alt="" />
+       </div>
+     }
+     </Container>
     </div>
   );
 }
