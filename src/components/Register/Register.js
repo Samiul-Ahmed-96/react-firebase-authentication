@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from '@firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, updateProfile } from '@firebase/auth';
 import Button from '@restart/ui/esm/Button';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -8,6 +8,7 @@ const Register = () => {
     
     const auth = getAuth();
     //States
+    const [name,setName] = useState('');
     const [email,setEmail] =useState('');
     const [password,setPassword] = useState('');
     const [error,setError] = useState('');
@@ -62,6 +63,7 @@ const Register = () => {
             const userLogged = result.user;
             console.log(userLogged);
             setError('');
+            setUserName();
             verifyEmail();
         })
         .catch((error) => {
@@ -77,11 +79,26 @@ const Register = () => {
         })
         alert('Check Your Email for reset the password');
     }
+    //user name
+    const setUserName = () => {
+        updateProfile(auth.currentUser,{
+            displayName : name
+        })
+        .then(res=> console.log(res))
+    }
+    //handle Name
+    const handleName = (e) =>{
+        setName(e.target.value);
+    }
 
     return (
         <div>
         <Form>
             <h1>{isLogin ? 'Login' : 'Register'}</h1>
+            {!isLogin && <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Your Name</Form.Label>
+            <Form.Control onBlur={handleName} type="text" placeholder="Enter your name" required/>
+            </Form.Group> }
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control onBlur={handleEmail} type="email" placeholder="Enter email" required/>
@@ -89,7 +106,6 @@ const Register = () => {
                 We'll never share your email with anyone else.
                 </Form.Text>
             </Form.Group>
-
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label> 
                 <Form.Control onBlur={handlePassword} type="password" placeholder="Password" required />
@@ -102,7 +118,7 @@ const Register = () => {
             {isLogin ? 'Login' : 'Register'}
             </Button>
             <Button onClick={handleResetPass}>Reset Password</Button>
-            </Form>
+        </Form>
         </div>
     );
 };
