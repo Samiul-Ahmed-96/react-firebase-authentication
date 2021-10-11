@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { FacebookAuthProvider, getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useState } from "react";
 import { Container } from 'react-bootstrap';
 import './App.css';
@@ -10,6 +10,8 @@ initAuthentication();
 const googleProvider = new GoogleAuthProvider();
 //github provider
 const githubProvider = new GithubAuthProvider();
+//facebook provider
+const facebookProvider = new FacebookAuthProvider();
 //auth from firebase
 const auth = getAuth();
 
@@ -51,6 +53,21 @@ const handleGithubSignIn = () =>{
       console.log(error);
     })
 }
+const handleFacebookSignIn = () =>{
+  signInWithPopup(auth,facebookProvider)
+  .then((result)=>{
+    const userLogged = result.user;
+    const loggedInUser = {
+      name : userLogged.displayName,
+      email : userLogged.email,
+      photo : userLogged.photoURL
+    };
+    setUser(loggedInUser);
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
 //Sign Out handler
 const handleSignOut = () =>{
   signOut(auth)
@@ -69,6 +86,7 @@ const handleSignOut = () =>{
        <div>
        <button onClick={handleGoogleSignIn}>Google Sign In</button>
        <button onClick={handleGithubSignIn}>Github Sign In</button>
+       <button onClick={handleFacebookSignIn}>Facebook Sign In</button>
        </div>:
        <button onClick={handleSignOut}>Sign out</button>
      }

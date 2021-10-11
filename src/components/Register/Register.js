@@ -62,7 +62,7 @@ const Register = () => {
         .then(result => {
             const userLogged = result.user;
             console.log(userLogged);
-            setError('');
+            setError('Succesfully create your account');
             setUserName();
             verifyEmail();
         })
