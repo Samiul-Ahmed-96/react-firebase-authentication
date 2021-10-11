@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from '@firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from '@firebase/auth';
 import Button from '@restart/ui/esm/Button';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -24,6 +24,13 @@ const Register = () => {
     const handleIsLogin = (e) => {
         setLogin(e.target.checked);
     }
+    //user verification
+    const verifyEmail = () =>{
+        sendEmailVerification(auth.currentUser)
+        .then(result=> {
+            console.log(result);
+        })
+    }
     //handle register
     const handleRegister = (e) => {
         e.preventDefault();
@@ -40,7 +47,12 @@ const Register = () => {
         signInWithEmailAndPassword(auth,email,password)
         .then(result => {
             console.log(result.user);
+            setError('');
         })
+        .catch((error) => {
+            setError(error.message)
+        })
+        
 
     }
     //create new user
@@ -49,11 +61,21 @@ const Register = () => {
         .then(result => {
             const userLogged = result.user;
             console.log(userLogged);
+            setError('');
+            verifyEmail();
         })
         .catch((error) => {
             const errorMessage = error.message;
-            console.log(errorMessage);
+            setError(errorMessage);
         });
+    }
+    //Reset password
+    const handleResetPass = () =>{
+        sendPasswordResetEmail(auth,email)
+        .then((res) => {
+            console.log(res);
+        })
+        alert('Check Your Email for reset the password');
     }
 
     return (
@@ -79,6 +101,7 @@ const Register = () => {
             <Button onClick={handleRegister} variant="primary" type="submit">
             {isLogin ? 'Login' : 'Register'}
             </Button>
+            <Button onClick={handleResetPass}>Reset Password</Button>
             </Form>
         </div>
     );
